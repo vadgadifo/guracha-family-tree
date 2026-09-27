@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Legacy of Guracha — Family Tree</title>
+<style>
+  :root {
+    --ink:      #1a0f07;
+    --brown:    #4a2c0f;
+    --mid:      #7a5230;
+    --gold:     #c8922a;
+    --sand:     #e8c46a;
+    --parchment:#fdf6e3;
+    --paper:    #fffcf5;
+    --border:   #e2d4b8;
+    --muted:    #9c8055;
+    --green:    #2d6a4f;
+    --red:      #8b1a1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Georgia, 'Times New Roman', serif; background: var(--parchment); color: var(--ink); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 20px 24px 16px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  }
+  .header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .logo { width: 44px; height: 44px; border-radius: 10px; background: var(--gold); display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+  .header-title { font-size: clamp(18px, 3vw, 26px); font-weight: normal; letter-spacing: -.3px; }
+  .header-sub { font-size: 11px; color: var(--sand); margin-top: 2px; font-style: italic; font-family: sans-serif; }
+  .header-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; max-width: 420px; }
+  .search-wrap input {
+    width: 100%; padding: 9px 36px 9px 14px;
+    border: 1.5px solid var(--border); border-radius: 24px;
+    font-family: sans-serif; font-size: 13px; background: var(--paper);
+    outline: none; color: var(--ink);
+  }
+  .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,146,42,.2); }
+  .search-clear { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: var(--gold); border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 10px; display: none; color: white; }
+  .btn { padding: 7px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--paper); font-family: sans-serif; font-size: 11px; cursor: pointer; color: var(--brown); white-space: nowrap; }
+  .btn:hover { background: var(--parchment); border-color: var(--gold); }
+  .btn.active { background: var(--gold); border-color: var(--gold); color: white; }
+  .stats-bar { display: flex; gap: 16px; font-family: sans-serif; font-size: 11px; color: var(--sand); flex-wrap: wrap; }
+  .stats-bar span { display: flex; align-items: center; gap: 5px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); display: inline-block; }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: linear-gradient(135deg, var(--brown) 0%, #2a1505 100%);
+    color: var(--parchment); padding: 36px 24px 30px;
+    border-bottom: 3px solid var(--gold);
+  }
+  .hero h2 { font-size: clamp(20px,4vw,34px); font-weight: normal; max-width: 640px; line-height: 1.25; margin-bottom: 10px; }
+  .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
+  .hero-stat { text-align: center; }
+  .hero-stat .num { font-size: 28px; color: var(--sand); display: block; }
+  .hero-stat .lbl { font-family: sans-serif; font-size: 10px; color: rgba(253,246,227,.6); letter-spacing: .1em; display: block; text-transform: uppercase; }
+
+  /* ── SEARCH RESULT BAR ── */
+  .result-bar {
+    background: var(--sand); color: var(--ink);
+    padding: 8px 24px; font-family: sans-serif; font-size: 12px;
+    display: none; align-items: center; gap: 8px;
+  }
+  .result-bar.show { display: flex; }
+
+  /* ── LAYOUT ── */
+  .content { max-width: 1400px; margin: 0 auto; padding: 24px 16px 60px; }
+  .generation-label {
+    font-family: sans-serif; font-size: 10px; text-transform: uppercase;
+    letter-spacing: .18em; color: var(--muted); margin: 28px 0 10px;
+    padding-bottom: 6px; border-bottom: 1px solid var(--border);
+  }
+  .branches-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+
+  /* ── BRANCH CARD ── */
+  .branch {
+    border-radius: 16px; border: 1.5px solid var(--border);
+    background: var(--paper); overflow: hidden;
+    box-shadow: 0 4px 16px rgba(26,15,7,.06);
+    border-left: 5px solid var(--gold);
+  }
+  .branch.red-line  { border-left-color: #8b1a1a; }
+  .branch.green-line { border-left-color: var(--green); }
+  .branch.blue-line { border-left-color: #1a4a7a; }
+  .branch.purple-line { border-left-color: #5a2a7a; }
+  .branch.teal-line { border-left-color: #1a6a5a; }
+
+  .branch-header {
+    padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    cursor: pointer; user-select: none;
+  }
+  .branch-header:hover { background: rgba(200,146,42,.07); }
+  .branch-name { font-size: 16px; line-height: 1.3; }
+  .branch-desc { font-family: sans-serif; font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .branch-toggle {
+    font-family: sans-serif; font-size: 11px; padding: 4px 10px;
+    border-radius: 12px; border: 1px solid var(--border);
+    background: var(--parchment); color: var(--brown); flex-shrink: 0;
+    cursor: pointer; margin-left: 8px;
+  }
+  .branch.open .branch-toggle { background: var(--ink); color: var(--parchment); border-color: var(--ink); }
+
+  /* ── PERSON LIST ── */
+  .person-list { display: none; padding: 0 12px 12px; }
+  .branch.open .person-list { display: block; }
+
+  .person {
+    border-radius: 12px; border: 1px solid var(--border);
+    background: #fffdf6; padding: 12px 14px; margin-bottom: 8px;
+    position: relative;
+  }
+  .person::before {
+    content: ''; position: absolute; left: -13px; top: 18px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--sand); border: 2px solid var(--paper);
+  }
+  .person-list-inner { border-left: 2px solid var(--border); padding-left: 12px; }
+  .person-name { font-size: 15px; font-weight: bold; }
+  .person-spouse { font-family: sans-serif; font-size: 12px; color: var(--mid); margin-top: 2px; }
+  .person-meta { font-family: sans-serif; font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .08em; }
+  .badge {
+    display: inline-block; font-family: sans-serif; font-size: 9px;
+    padding: 2px 7px; border-radius: 10px; margin-top: 4px;
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .badge-deceased { background: #f5eaea; color: var(--red); border: 1px solid #e8c8c8; }
+  .badge-young    { background: #eaf5ea; color: var(--green); border: 1px solid #c8e8c8; }
+  .badge-notmarried { background: #eaf0f5; color: #2a5a7a; border: 1px solid #c8d8e8; }
+
+  /* ── VITTUKUU (great-grandchildren) ── */
+  .vittukuu-section {
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed var(--border);
+  }
+  .vittukuu-label {
+    font-family: sans-serif; font-size: 9px; text-transform: uppercase;
+    letter-spacing: .14em; color: var(--muted); margin-bottom: 6px;
+  }
+  .vittukuu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .vittukuu-card {
+    border-radius: 8px; border: 1px solid var(--border);
+    background: white; padding: 7px 9px;
+    font-size: 12px;
+  }
+  .vittukuu-card .v-name { font-weight: 600; }
+  .vittukuu-card .v-spouse { font-family: sans-serif; font-size: 10px; color: var(--mid); }
+  .vittukuu-card .v-children { font-family: sans-serif; font-size: 9px; color: var(--muted); margin-top: 2px; }
+
+  /* ── IMPROVED SEARCH ── */
+  .search-panel {
+    background: var(--paper);
+    border-bottom: 2px solid var(--gold);
+    padding: 14px 24px;
+    position: sticky; top: 0; z-index: 90;
+  }
+  .search-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .search-box-wrap {
+    position: relative; flex: 1; min-width: 240px;
+  }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; color: var(--muted); pointer-events: none;
+  }
+  .search-box-wrap input {
+    width: 100%; padding: 11px 44px 11px 42px;
+    border: 2px solid var(--border); border-radius: 28px;
+    font-family: Georgia, serif; font-size: 14px;
+    background: white; color: var(--ink); outline: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .search-box-wrap input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 4px rgba(200,146,42,.15);
+  }
+  .search-box-wrap input::placeholder { color: var(--muted); font-style: italic; }
+  .search-clear-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: var(--ink); border: none; border-radius: 50%;
+    width: 24px; height: 24px; cursor: pointer; color: white;
+    font-size: 11px; display: none; align-items: center; justify-content: center;
+  }
+  .search-clear-btn.visible { display: flex; }
+
+  /* Dropdown suggestions */
+  .search-suggestions {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    z-index: 200; max-height: 320px; overflow-y: auto; display: none;
+  }
+  .search-suggestions.open { display: block; }
+  .suggestion-item {
+    padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #f0e8d8;
+    transition: background .1s;
+  }
+  .suggestion-item:last-child { border-bottom: none; }
+  .suggestion-item:hover, .suggestion-item.focused { background: #fff8e8; }
+  .sug-name { font-size: 14px; font-weight: bold; color: var(--ink); }
+  .sug-name mark { background: var(--sand); color: var(--ink); border-radius: 2px; padding: 0 2px; }
+  .sug-context { font-family: sans-serif; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sug-empty { padding: 16px; text-align: center; font-family: sans-serif; font-size: 13px; color: var(--muted); }
+
+  /* Result strip */
+  .search-result-strip {
+    margin-top: 8px; font-family: sans-serif; font-size: 12px;
+    color: var(--brown); display: none; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .search-result-strip.show { display: flex; }
+  .result-pill {
+    background: var(--sand); color: var(--ink);
+    border-radius: 12px; padding: 3px 10px; font-size: 11px; font-weight: bold;
+  }
+  .nav-btns { display: flex; gap: 4px; margin-left: auto; }
+  .nav-btn {
+    background: var(--ink); color: white; border: none;
+    border-radius: 8px; padding: 4px 10px; font-size: 11px;
+    cursor: pointer; font-family: sans-serif;
+  }
+  .nav-btn:hover { background: var(--brown); }
+  .nav-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+
+  /* Highlight matched text within cards */
+  .highlight { outline: 3px solid var(--gold); background: #fff8e8 !important; border-radius: 12px; }
+  .dimmed { opacity: 0.3; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: rgba(253,246,227,.7);
+    padding: 32px 24px; font-family: sans-serif; font-size: 12px;
+    text-align: center; line-height: 1.6;
+  }
+  footer strong { color: var(--sand); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .vittukuu-grid { grid-template-columns: 1fr; }
+    .branches-grid { grid-template-columns: 1fr; }
+    .hero-meta { gap: 12px; }
+    .hero-stat .num { font-size: 22px; }
+  }
+
+  /* ── SECTION INTRO BOX ── */
+  .section-intro {
+    background: var(--paper); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+    font-size: 13px; line-height: 1.6; color: var(--brown);
+    border-left: 4px solid var(--gold);
+  }
+
+  /* Spouse connector marker */
+  .x-mark { color: var(--muted); font-size: 12px; font-style: italic; margin: 0 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-top">
+    <div class="logo">🌳</div>
+    <div>
+      <div class="header-title">The Legacy of Guracha — Family Tree</div>
+      <div class="header-sub">Guracha Family Heritage Record · 2026</div>
+    </div>
+  </div>
+  <div class="header-controls">
+    <button class="btn" onclick="expandAll()">Expand All</button>
+    <button class="btn" onclick="collapseAll()">Collapse All</button>
+  </div>
+  <div class="stats-bar" style="margin-top:10px">
+    <span><span class="dot"></span> 13 Children of Guracha</span>
+    <span><span class="dot"></span> 71 Grandchildren</span>
+    <span><span class="dot"></span> 147+ Great-Grandchildren</span>
+    <span><span class="dot"></span> 4 Generations documented</span>
+  </div>
+</header>
+
+<!-- NEW SEARCH PANEL -->
+<div class="search-panel">
+  <div class="search-row">
+    <div class="search-box-wrap" id="searchWrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search family members by name…"
+        autocomplete="off"
+        oninput="handleSearch(this.value)"
+        onkeydown="handleSearchKey(event)"
+        onfocus="showSuggestions()"
+      >
+      <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="Clear search">✕</button>
+      <div class="search-suggestions" id="suggestionsBox"></div>
+    </div>
+  </div>
+  <div class="search-result-strip" id="resultStrip">
+    <span class="result-pill" id="resultPill"></span>
+    <span id="resultLabel"></span>
+    <div class="nav-btns">
+      <button class="nav-btn" id="prevBtn" onclick="navigateResult(-1)">↑ Prev</button>
+      <button class="nav-btn" id="nextBtn" onclick="navigateResult(1)">↓ Next</button>
+    </div>
+    <button class="btn" style="font-size:11px" onclick="clearSearch()">Clear ✕</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>From Gafo Abio came Guracha.<br>From Guracha came generations.</h2>
+  <div class="hero-meta">
+    <div class="hero-stat"><span class="num">4</span><span class="lbl">Wives</span></div>
+    <div class="hero-stat"><span class="num">13</span><span class="lbl">Children</span></div>
+    <div class="hero-stat"><span class="num">71</span><span class="lbl">Grandchildren</span></div>
+    <div class="hero-stat"><span class="num">147+</span><span class="lbl">Great-Grandchildren</span></div>
+    <div class="hero-stat"><span class="num">1971</span><span class="lbl">Year of passing · Mombasa</span></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content">
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- THE ROOTS BEFORE GURACHA -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">The Roots — Gafo Abio (Father of Guracha)</div>
+  <div class="section-intro">
+    Before Guracha came his father <strong>Gafo Abio</strong>, who had two wives. His first wife Haduyo bore five children including Abio Gafo, later known as Guracha. His second wife Rumbe Kofa bore one child, Hadia Gafo.
+  </div>
+
+  <div class="branches-grid">
+
+    <!-- Haduyo (1st Wife of Gafo Abio) -->
+    <div class="branch green-line" id="b-haduyo-wife">
+      <div class="branch-header" onclick="toggle('b-haduyo-wife')">
+        <div>
+          <div class="branch-name">First Wife of Gafo Abio — Haduyo</div>
+          <div class="branch-desc">Mother of Guracha and 4 siblings</div>
+        </div>
+        <div class="branch-toggle">5 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Abio Gafo <span style="color:var(--gold)">(later known as Guracha)</span></div><div class="person-meta">The Patriarch · Central figure of this documentary</div></div>
+          <div class="person"><div class="person-name">2. Jillo Gafo</div></div>
+          <div class="person"><div class="person-name">3. Galana Gafo</div></div>
+          <div class="person"><div class="person-name">4. Mbuya Gafo (Hafua)</div></div>
+          <div class="person"><div class="person-name">5. Hawadesa Gafo</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rumbe Kofa (2nd Wife of Gafo Abio) -->
+    <div class="branch blue-line" id="b-rumbe">
+      <div class="branch-header" onclick="toggle('b-rumbe')">
+        <div>
+          <div class="branch-name">Second Wife of Gafo Abio — Rumbe Kofa</div>
+          <div class="branch-desc">Mother of Hadia Gafo</div>
+        </div>
+        <div class="branch-toggle">1 child</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person">
+            <div class="person-name">1. Hadia Gafo</div>
+            <div class="person-meta">Mother of Brown, Naomi, Ghamachana, Rumbe, Joseph</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /branches-grid -->
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- GURACHA'S FOUR WIVES -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">Abio Gafo (Guracha) — His Four Wives & Their Children</div>
+  <div class="section-intro">
+    Guracha married four wives at different stages of his life — not simultaneously. Each marriage began after the previous had ended. He passed away in <strong>1971</strong> and was laid to rest in <strong>Mombasa</strong>.
+  </div>
+  <div class="branches-grid">
+
+    <!-- Wife 1 - Mama Kapune -->
+    <div class="branch" id="b-kapune">
+      <div class="branch-header" onclick="toggle('b-kapune')">
+        <div>
+          <div class="branch-name">1st Wife — Mama Kapune</div>
+          <div class="branch-desc">One child · Haduyo Abio Snr</div>
+        </div>
+        <div class="branch-toggle">1 child</div>
+      </div>
+      <div class="person-list">
+        <div class="section-intro" style="margin-bottom:8px;font-size:12px">The full circumstances of Mama Kapune's departure from the marriage — whether by death or otherwise — remain an open question requiring further oral history from family elders.</div>
+        <div class="person-list-inner">
+          <div class="person">
+            <div class="person-name">1. Haduyo Abio Snr</div>
+            <div class="person-meta">Her children: Halubha, Hiribae (dec.), Chunjulu (dec.), Galole, Guyato, Ghamachana</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wife 2 - Mama Maita -->
+    <div class="branch blue-line" id="b-maita">
+      <div class="branch-header" onclick="toggle('b-maita')">
+        <div>
+          <div class="branch-name">2nd Wife — Mama Maita</div>
+          <div class="branch-desc">One child · Gafo Abio Snr</div>
+        </div>
+        <div class="branch-toggle">1 child</div>
+      </div>
+      <div class="person-list">
+        <div class="section-intro" style="margin-bottom:8px;font-size:12px">Mama Maita later left the marriage voluntarily after the birth of Gafo Abio.</div>
+        <div class="person-list-inner">
+          <div class="person">
+            <div class="person-name">1. Gafo Abio Snr</div>
+            <div class="person-spouse"><span class="x-mark">×</span> Sarah</div>
+            <div class="person-meta">8 children together — see Vittukuu section below</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wife 3 - Mama Hankima -->
+    <div class="branch red-line" id="b-hankima">
+      <div class="branch-header" onclick="toggle('b-hankima')">
+        <div>
+          <div class="branch-name">3rd Wife — Mama Hankima</div>
+          <div class="branch-desc">One child · Eliya (Deceased)</div>
+        </div>
+        <div class="branch-toggle">1 child</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person">
+            <div class="person-name">1. Eliya (Eli)</div>
+            <span class="badge badge-deceased">Deceased</span>
+            <div class="person-meta" style="margin-top:6px">Died at a very tender age. He had been laid in the banda (chacha) while his parents were at a distance and could not reach him in time when a fire broke out. He was rushed to hospital by canoe but is believed to have died before arriving. One of the most deeply remembered tragedies in the family history.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wife 4 - Selita Mkyagawa -->
+    <div class="branch purple-line" id="b-selita">
+      <div class="branch-header" onclick="toggle('b-selita')">
+        <div>
+          <div class="branch-name">4th Wife — Selita Mkyagawa</div>
+          <div class="branch-desc">10 children · Largest branch of the family</div>
+        </div>
+        <div class="branch-toggle">10 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Rebecca Haduyo Abio</div><div class="person-meta">9 children · See lineage section</div></div>
+          <div class="person"><div class="person-name">2. Suleiman Hiribae Abio</div><div class="person-meta">Children with Hannah Hadadah (8) + Mama Agnes (1)</div></div>
+          <div class="person"><div class="person-name">3. Moses Galana Abio</div><div class="person-meta">Children with Koshi Rhova, Dishani Nangorombi, Yunia Seth</div></div>
+          <div class="person"><div class="person-name">4. Phillip Jillo Abio</div><div class="person-meta">Children with late Mama Doris + Mama Leah</div></div>
+          <div class="person"><div class="person-name">5. Gafo Abio</div><span class="badge badge-deceased">Deceased in infancy</span></div>
+          <div class="person"><div class="person-name">6. Hadia Abio</div><span class="badge badge-deceased">Deceased in infancy</span></div>
+          <div class="person"><div class="person-name">7. Harrison Phillip Morowa Abio</div><div class="person-meta">Spouse: Margaret Koshi Moses · See lineage section</div></div>
+          <div class="person"><div class="person-name">8. Patrick Gafo Abio</div><div class="person-spouse"><span class="x-mark">×</span> Rahel Hadiribo</div><div class="person-meta">5 children — Phillip Abio, Irene, Alvine + 2 deceased in infancy</div></div>
+          <div class="person"><div class="person-name">9. Naomi Hadia Abio</div><span class="badge badge-deceased">Passed away shortly after childbirth</span><div class="person-meta">Left behind son: Innocent Subira</div></div>
+          <div class="person"><div class="person-name">10. Dhadho Abio</div><div class="person-meta">Children with Gumato Bulle, Margaret Kamene, Mama Nuru</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /branches-grid -->
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- HADUYO ABIO SNR DESCENDANTS -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">Lineage of Haduyo Abio Snr — Child of Mama Kapune</div>
+  <div class="branches-grid">
+    <div class="branch green-line" id="b-haduyo-snr">
+      <div class="branch-header" onclick="toggle('b-haduyo-snr')">
+        <div>
+          <div class="branch-name">Haduyo Abio Snr — 6 Children</div>
+          <div class="branch-desc">Descendants of Mama Kapune's line</div>
+        </div>
+        <div class="branch-toggle">6 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Halubha Ddima</div><div class="person-spouse"><span class="x-mark">×</span> Ade Doyo</div><div class="person-meta">8 children: Selina Nkandugu, Elia Doyo, David Maro, Rahab Ghamaloku, Joyce Diramo, Dorice Guyato, Elisha Mkofira, Philip Kofa</div></div>
+          <div class="person"><div class="person-name">2. Hiribae Ddima</div><span class="badge badge-deceased">Deceased</span><div class="person-meta">3 children: Haduyo, Galole, Ddima</div></div>
+          <div class="person"><div class="person-name">3. Chunjulu Ddima</div><span class="badge badge-deceased">Deceased</span><div class="person-meta">2 children: Hashora, Jamila</div></div>
+          <div class="person"><div class="person-name">4. Galole Ddima</div><div class="person-spouse"><span class="x-mark">×</span> Ms Eunice</div><div class="person-meta">6 children: Ddima, Hiribae, Haduyo (late), Hamesa, Halubha, Chunjulu</div></div>
+          <div class="person"><div class="person-name">5. Guyato Ddima</div><div class="person-meta">7 children: Rhoka, Joyce, Dirivo, Komora, Koshi, Gamashuru, Diramo</div></div>
+          <div class="person"><div class="person-name">6. Ghamachana Ddima</div><div class="person-meta">3 children: Mayaa, Makorani, Dhadho</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- SELITA MKYAGAWA DETAILED LINEAGES -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">Lineages — Children of Selita Mkyagawa (4th Wife)</div>
+  <div class="branches-grid">
+
+    <!-- Rebecca -->
+    <div class="branch" id="b-rebecca">
+      <div class="branch-header" onclick="toggle('b-rebecca')">
+        <div><div class="branch-name">1. Rebecca Haduyo Abio</div><div class="branch-desc">1st child of Selita Mkyagawa · 9 children</div></div>
+        <div class="branch-toggle">9 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Shirikisho</div><span class="badge badge-deceased">Deceased</span><div class="person-meta">2 children: Riziki, Mohamed (dec.) — different relationships</div></div>
+          <div class="person"><div class="person-name">2. Hawadesa</div><div class="person-spouse"><span class="x-mark">×</span> Siri (current)</div><div class="person-meta">6 children: Zawadi, Winnie, Bonaya (Bonnie), Greyson (Noah), Jacklin, Gerera</div></div>
+          <div class="person"><div class="person-name">3. Hiribae</div><div class="person-meta">5 children: Rhova Lugu (with Janet), Hawadesa (with Janet), Salim (with Mwanajuma), Rhova Jnr (with Stella Galana), Bajebi (with Stella Galana)</div></div>
+          <div class="person"><div class="person-name">4. Hadia</div><div class="person-spouse"><span class="x-mark">×</span> Isack Kamoyo</div><div class="person-meta">4 children: Mutuma, Jennifer, Kaendo (Rebecca), Ann</div></div>
+          <div class="person"><div class="person-name">5. Jillo</div><span class="badge badge-deceased">Deceased / Missing</span><div class="person-meta">No offspring</div></div>
+          <div class="person"><div class="person-name">6. Bajebi</div><div class="person-meta">1 child: Haduyo (with Nkandugu)</div></div>
+          <div class="person"><div class="person-name">7. Babo</div><div class="person-spouse"><span class="x-mark">×</span> Florence</div><div class="person-meta">3 children: Smith Rhova Babo, Hazel Hiribae Babo (with Florence); Smith Rhova Babo II (separate relationship)</div></div>
+          <div class="person"><div class="person-name">8. Hakofa</div><div class="person-meta">8 children: Amuma, Sonia, Hawayu, Elina, Obed, Haduyo, Rhova (with Wario Ntusa/Hewani); Swabra (separate)</div></div>
+          <div class="person"><div class="person-name">9. Margaret (Habokea)</div><div class="person-meta">2 children: Christian (with Peter Manya), Alain (separate)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suleiman -->
+    <div class="branch blue-line" id="b-suleiman">
+      <div class="branch-header" onclick="toggle('b-suleiman')">
+        <div><div class="branch-name">2. Suleiman Hiribae Abio</div><div class="branch-desc">2nd child · Two wives · 9 children</div></div>
+        <div class="branch-toggle">9 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">With Hannah Hadadah (8 children)</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">1. Phillip Abio Hiribae</div><div class="v-spouse">× Rita Nalua Makorani</div><div class="v-children">Mitchell Ghamaharo, Kelvin Baraka, Damaris Haddadah, Darius Hiribae</div></div>
+              <div class="vittukuu-card"><div class="v-name">2. Catherine Mkyagawa</div><div class="v-spouse">× Ibrahim</div><div class="v-children">Wilfred Masuluti, Simon Naghea, Mathew Galicha</div></div>
+              <div class="vittukuu-card"><div class="v-name">3. Patrick Gafo Hiribae</div><div class="v-spouse">× Irene Dhahabu Sulubu</div><div class="v-children">Kelvin Hiribae Gafo, Hannah Haddadah</div></div>
+              <div class="vittukuu-card"><div class="v-name">4. Selina Haduyo Hiribae</div><div class="v-spouse">× Amani Ddaddah Tarshish</div><div class="v-children">Anthony Bonaya (Bravo), Earnest Shari Ddaddah</div></div>
+              <div class="vittukuu-card"><div class="v-name">5. Evaline Hadia Hiribae</div><div class="v-spouse">× David Muendo</div><div class="v-children">Patricia Haddadah, Franklin Musimi, John Malelu</div></div>
+              <div class="vittukuu-card"><div class="v-name">6. Moses Galana Hiribae</div><div class="v-children">With Patience: Marcel, Adriel, Gael · With Terry Chege: Neo, Griffin</div></div>
+              <div class="vittukuu-card"><div class="v-name">7. Johnson Jilo Hiribae</div><div class="v-spouse">× Florence Malika Kayuke</div><div class="v-children">Jayden Hiribae Jilo, Ethan Abio (Guracha) Jillo</div></div>
+              <div class="vittukuu-card"><div class="v-name">8. Harrison Morowa Hiribae</div><div class="v-spouse">× Josephine Mkeandera</div><div class="v-children">Evan Hiribae Morowa, Ian Abio (Guracha) Morowa</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Mama Agnes (1 child)</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">9. Philip Abio Hiribae II</div><span class="badge badge-notmarried">Not yet married</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moses Galana -->
+    <div class="branch teal-line" id="b-moses">
+      <div class="branch-header" onclick="toggle('b-moses')">
+        <div><div class="branch-name">3. Moses Galana Abio</div><div class="branch-desc">3rd child · Three wives · 11 children</div></div>
+        <div class="branch-toggle">11 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">With Koshi Rhova</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">1. Innocent Mkyagawa Galana</div><div class="v-children">Purity Kassim (Halima)</div></div>
+              <div class="vittukuu-card"><div class="v-name">2. Gertrude Haduyo Galana</div><div class="v-children">Eunice, Penina, Kerna, Patience, Balesa, Kezia (all Francis)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Dishani Nangorombi</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">3. Selina Mkyagawa Galana</div><span class="badge badge-deceased">Deceased · No children</span></div>
+              <div class="vittukuu-card"><div class="v-name">4. Abio Galana</div><div class="v-children">Moses Abio, Neema Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">5. Gafo Galana</div><div class="v-children">Sandra Dishani Gafo, Moses Galana Gafo</div></div>
+              <div class="vittukuu-card"><div class="v-name">6. Hadiya Galana</div><div class="v-children">Ibrahim Wario Enock, Alvine Abigael Komora, Moses Goodluck, Aline Yelina Enock, Filikita Maodo Komora, Sylvester Mula Enock</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Yunia Seth</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">7. Mkyagawa Galana (Mwana)</div><div class="v-children">Asha Habona Jilo, Hassan Baraya Jilo, Melvin Tunda Jilo</div></div>
+              <div class="vittukuu-card"><div class="v-name">8. Selina Haduyo Galana</div><span class="badge badge-deceased">Deceased · No children</span></div>
+              <div class="vittukuu-card"><div class="v-name">9. Hadia Galana</div><div class="v-children">No children yet</div></div>
+              <div class="vittukuu-card"><div class="v-name">10. Hawadesa Galana</div><div class="v-children">Ruth Nawana Buya</div></div>
+              <div class="vittukuu-card"><div class="v-name">11. Hadima Galana</div><div class="v-children">No children yet</div></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phillip Jillo -->
+    <div class="branch" id="b-phillip">
+      <div class="branch-header" onclick="toggle('b-phillip')">
+        <div><div class="branch-name">4. Phillip Jillo Abio</div><div class="branch-desc">4th child · Two partners · 3 children</div></div>
+        <div class="branch-toggle">3 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">With Late Mama Doris</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">1. Phillip Abio Jillo</div><div class="v-spouse">× Rita Mupa Jawa</div><div class="v-children">No great-grandchildren yet</div></div>
+              <div class="vittukuu-card"><div class="v-name">2. David Gafo Jillo</div><div class="v-children">Kingston Jillo Gafo (with Constance Halako Asaph) · Fostered Veronica (with late Millicent Orwa)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Mama Leah</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">3. Selita Mkyagawa Jillo</div><div class="v-spouse">× Buya Awadhi</div><div class="v-children">Bajila Salim</div></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Harrison Morowa -->
+    <div class="branch purple-line" id="b-harrison">
+      <div class="branch-header" onclick="toggle('b-harrison')">
+        <div><div class="branch-name">7. Harrison Phillip Morowa Abio</div><div class="branch-desc">7th child · 13 children</div></div>
+        <div class="branch-toggle">13 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">With Margaret Koshi Moses</div><div class="person-meta">1 child: Joseph Abio Morowa</div>
+            <div class="vittukuu-section"><div class="vittukuu-label">Joseph's children with Hashora Komora + Sharuti Gwiyo</div><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Margaret Koshi Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Harrison Morowa Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Venus Mkyagawa Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Brainy Gafo Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Margaret Koshi Abio (Jnr)</div><div class="v-children">with Sharuti Gwiyo</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Mwanahadie Bwanakher</div><div class="person-meta">Philip Abio Morowa × Mbeyu Chiwai: Harrison Morowa, William Gafo, Maryane Nabuo, Jael Selita · Also parented Mwanahamisi Kombo</div>
+            <div class="vittukuu-section"><div class="vittukuu-label">Mwanahamisi Kombo's children</div><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Naima Salim</div></div>
+              <div class="vittukuu-card"><div class="v-name">Aisha Mtua</div></div>
+              <div class="vittukuu-card"><div class="v-name">Samira Imani</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Beatrice Kathina</div><div class="person-meta">Parented: Sera Mwikali, Jesca Mwende, James Oloo, Millicent Ndinda, Mathew Boyi (Gafo) · Sired: Brian Gafo Morowa (dec.)</div></div>
+          <div class="person"><div class="person-name">With Mary Mwanzi</div><div class="person-meta">Sired: Teresiah Mkyagawa Morowa</div></div>
+          <div class="person"><div class="person-name">With Fatuma Ali</div><div class="person-meta">Sired: Nasir Mohamed, Nasra Mohamed</div><span class="badge badge-young">Still young</span></div>
+          <div class="person"><div class="person-name">With Hawa Oneko</div><div class="person-meta">Sired: Brighton Abio Morowa</div><span class="badge badge-young">Still young</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patrick Gafo -->
+    <div class="branch green-line" id="b-patrick">
+      <div class="branch-header" onclick="toggle('b-patrick')">
+        <div><div class="branch-name">8. Patrick Gafo Abio</div><div class="branch-desc">8th child × Rahel Hadiribo · 5 children (2 dec. in infancy)</div></div>
+        <div class="branch-toggle">5 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Mkyagawa Gafo</div><span class="badge badge-deceased">Passed away at 1 year 3 months</span></div>
+          <div class="person"><div class="person-name">2. Mkyagawa Gafo</div><span class="badge badge-deceased">Passed away two days after birth</span></div>
+          <div class="person"><div class="person-name">3. Phillip Abio Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Letah Macharia</div><div class="person-meta">1 child: Pryce Gafo Abio</div></div>
+          <div class="person"><div class="person-name">4. Irene Mkyagawa Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Peter Mubia</div><div class="person-meta">1 child: Zeal Wanjiku Kimani</div></div>
+          <div class="person"><div class="person-name">5. Alvine Haduyo Gafo</div><div class="person-meta">1 child: Deontay Gafo Lesian</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Naomi Hadia -->
+    <div class="branch red-line" id="b-naomi">
+      <div class="branch-header" onclick="toggle('b-naomi')">
+        <div><div class="branch-name">9. Naomi Hadia Abio</div><div class="branch-desc">9th child · Passed away shortly after childbirth</div></div>
+        <div class="branch-toggle">1 child</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person">
+            <div class="person-name">1. Innocent Subira</div>
+            <div class="person-spouse"><span class="x-mark">×</span> Ruth Atieno</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Hephsiba Hadia Subira</div></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dhadho -->
+    <div class="branch teal-line" id="b-dhadho">
+      <div class="branch-header" onclick="toggle('b-dhadho')">
+        <div><div class="branch-name">10. Dhadho Abio</div><div class="branch-desc">10th child · Three wives · 6 children</div></div>
+        <div class="branch-toggle">6 children</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">With Gumato Bulle</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">1. Esther Malika Dhadho</div><div class="v-spouse">× Hussein Bonaya</div><div class="v-children">Mwanajuma, Jillo, Aisha, Asma (all Bonaya)</div></div>
+              <div class="vittukuu-card"><div class="v-name">2. Ronald Abio Dhadho</div><div class="v-spouse">× Zauja Hakofa</div><div class="v-children">Amina Gumato Abio, Ibrahim Dhadho Abio, Malika Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">3. Richard Gafo Dhadho</div><div class="v-spouse">× Mary Malika Dhadho</div><div class="v-children">Alex Gafo Dhadho, Stacy Gafo Gumato, Alan Gafo Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">4. Raymond Alikano Dhadho</div><span class="badge badge-notmarried">Not yet married</span></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Margaret Kamene</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">5. Emily Mbaika Dhadho</div><div class="v-children">Emisam Wambua</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">With Mama Nuru (Deceased)</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">6. Abio Dhadho Jnr</div><span class="badge badge-notmarried">Not yet married</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /branches-grid -->
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- VITTUKUU (MAMA MAITA LINE) -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">Vittukuu — Great-Grandchildren Through Mama Maita's Line (Gafo Abio Snr × Sarah)</div>
+  <div class="branches-grid">
+    <div class="branch blue-line" id="b-vittukuu-maita">
+      <div class="branch-header" onclick="toggle('b-vittukuu-maita')">
+        <div><div class="branch-name">Gafo Abio Snr × Sarah — 8 Children</div><div class="branch-desc">Vittukuu through Mama Maita's line</div></div>
+        <div class="branch-toggle">8 branches</div>
+      </div>
+      <div class="person-list">
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Abio Philip Gafo × Monica Luwa</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">David Gafo Abio (Dedee)</div></div>
+              <div class="vittukuu-card"><div class="v-name">Bwoe Jillo Abio</div><span class="badge badge-deceased">Deceased in infancy</span></div>
+              <div class="vittukuu-card"><div class="v-name">Sarah Hambirhe Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Moses Galana Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Harrison Morowa Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Selina Hadduyo Abio</div></div>
+              <div class="vittukuu-card"><div class="v-name">Mary Hadia Abio</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">2. Haduyo Selina Gafo × Isaya Kokani</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Juliana Hakofa Kokani</div></div>
+              <div class="vittukuu-card"><div class="v-name">Sylvia Hadima Isaya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Rose Mkyagawa Kokani</div></div>
+              <div class="vittukuu-card"><div class="v-name">Obed Bajila Isaya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Agnes Bona Isaya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Consolata Hadia Kokani</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">3. Hadia Mary Gafo × Lameck Kofa (LK)</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Blandina Habwoya Kofa</div></div>
+              <div class="vittukuu-card"><div class="v-name">Jesper Malika Kofa</div></div>
+              <div class="vittukuu-card"><div class="v-name">Zakaria Bonaya Kofa (ZB)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">4. Yesse Maddawa Gafo × Esther Bahola</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Sara Hambirhe Maddawa</div></div>
+              <div class="vittukuu-card"><div class="v-name">David Gafo Maddawa (Dedee)</div></div>
+              <div class="vittukuu-card"><div class="v-name">Philip Abio Maddawa</div></div>
+              <div class="vittukuu-card"><div class="v-name">Mercy Hadduyo Maddawa</div></div>
+              <div class="vittukuu-card"><div class="v-name">Rose Hawadesa Maddawa</div></div>
+              <div class="vittukuu-card"><div class="v-name">Moses Galana Maddawa (Babusa)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">5. Rose Hawadesa Gafo</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Winnie Wande</div></div>
+              <div class="vittukuu-card"><div class="v-name">Gafo Babusa (Priston)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">6. Subira Hadima Gafo × Julius Buya</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Johnson Jillo Buya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Joy Mkyanddera Buya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Rachel Hadhidha Buya</div></div>
+              <div class="vittukuu-card"><div class="v-name">Michael Yaro Buya (Mike)</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">7. Moses Galana Gafo × Maneno Gayoye</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">David Gafo Galana</div></div>
+              <div class="vittukuu-card"><div class="v-name">Sarah Hambirhe Galana</div></div>
+              <div class="vittukuu-card"><div class="v-name">Haddima Subira Galana</div></div>
+            </div></div>
+          </div>
+          <div class="person"><div class="person-name">8. Hiribae Suleiman Gafo × Melvin Dhadho</div>
+            <div class="vittukuu-section"><div class="vittukuu-grid">
+              <div class="vittukuu-card"><div class="v-name">Princess Hambirhe Hiribae</div></div>
+              <div class="vittukuu-card"><div class="v-name">Precious Maitta Hiribae</div></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════ -->
+  <!-- CHILDREN RAISED BY GURACHA -->
+  <!-- ════════════════════════════════════════════════════════ -->
+  <div class="generation-label">Children of Guracha's Siblings — Raised by Guracha</div>
+  <div class="section-intro">
+    Some of Guracha's siblings passed away while their children were young. Guracha took these children in and raised them as his own. Their stories form an essential part of the wider family legacy.
+  </div>
+  <div class="branches-grid">
+
+    <!-- Gafo Jillo (Nehemia) -->
+    <div class="branch green-line" id="b-gafo-jillo">
+      <div class="branch-header" onclick="toggle('b-gafo-jillo')">
+        <div><div class="branch-name">Gafo Jillo (Nehemia)</div><div class="branch-desc">Son of Jilo Gafo · Raised by Guracha · 9 children</div></div>
+        <div class="branch-toggle">9 children</div>
+      </div>
+      <div class="person-list">
+        <div class="section-intro" style="font-size:12px;margin-bottom:8px">Gafo Jillo married <strong>Margret Makosa Abio</strong>. Note: the name Alice Haduyo was given to two daughters — the first died at 3 months; the second was named in her memory.</div>
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Josephine Haoddo Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Moses Agot (Kisumu, Bondo)</div><div class="person-meta">4 children: Joseph James Emmanuel, Gabriel Gafo Otieno, Smith Wiggles Werthy Otieno (dec.), Joyce Ladonna Akinyi</div></div>
+          <div class="person"><div class="person-name">2. Elvis Jillo Gafo (Elvis Madawa Gafo)</div><span class="badge badge-deceased">Deceased · Did not marry · No children</span></div>
+          <div class="person"><div class="person-name">3. Alice Haduyo Gafo — First Alice</div><span class="badge badge-deceased">Died at 3 months</span><div class="person-meta">Her name was preserved and given to a later daughter</div></div>
+          <div class="person"><div class="person-name">4. Joyce Hawadesa Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Harrison Karissa Fujo (Bamba)</div><div class="person-meta">3 children: Isaac Mkare Fujo, Beatrice Sidi Fujo, Samson Karema Fujo</div></div>
+          <div class="person"><div class="person-name">5. Eric Abio Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Lilian Mkeakala Bonaya (Kulesa)</div><div class="person-meta">1 child: Easter Margaret Makosa</div></div>
+          <div class="person"><div class="person-name">6. Naomi Haddia Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Harrison Karissa Ngala (Mjanaheri)</div><div class="person-meta">1 child: Morgan Baraka Ngala</div></div>
+          <div class="person"><div class="person-name">7. Alice Haduyo Gafo — Second Alice</div><div class="person-spouse"><span class="x-mark">×</span> Emmanuel Badaso (Kulesa)</div><div class="person-meta">3 children: Lilian Hashora Badaso, John Jillo Badaso, Mary Lelia Badaso · Emmanuel passed away after a short time together</div></div>
+          <div class="person"><div class="person-name">8. Janet Haddima Gafo</div><div class="person-spouse"><span class="x-mark">×</span> Bakari Soso (Semikaro)</div><div class="person-meta">3 children: Agnes Diramo Komora, Charity Aziza Komora, Angel Jesse</div></div>
+          <div class="person"><div class="person-name">9. Mercy Guyato Gafo</div><span class="badge badge-deceased">Deceased</span><div class="person-meta">Gave birth to a stillborn child who was not named</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Haduyo Galana (Rebecca) -->
+    <div class="branch purple-line" id="b-haduyo-galana">
+      <div class="branch-header" onclick="toggle('b-haduyo-galana')">
+        <div><div class="branch-name">Haduyo Galana (Rebecca)</div><div class="branch-desc">Daughter of Galana Gafo · Raised by Guracha · 8 children · 21 grandchildren</div></div>
+        <div class="branch-toggle">8 children</div>
+      </div>
+      <div class="person-list">
+        <div class="section-intro" style="font-size:12px;margin-bottom:8px">Rebecca married <strong>Yako Simon</strong>. She had 8 children and 21 grandchildren in total.</div>
+        <div class="person-list-inner">
+          <div class="person"><div class="person-name">1. Moroa Yako</div><div class="person-spouse"><span class="x-mark">×</span> Belinda Robert</div><div class="person-meta">2 children: Rebecca Moroa, Jacob Moroa</div></div>
+          <div class="person"><div class="person-name">2. Malibe Yako</div><div class="person-spouse"><span class="x-mark">×</span> Haigwo Dambala</div><div class="person-meta">3 children: Jacob Malibe, Moroa Malibe, Rebecca Malibe</div></div>
+          <div class="person"><div class="person-name">3. Abihael Yako</div><div class="person-spouse"><span class="x-mark">×</span> Gijo Maghere</div><div class="person-meta">2 children: Bonaya Gijo, Neema Gijo</div></div>
+          <div class="person"><div class="person-name">4. Lidyia Yako</div><div class="person-spouse"><span class="x-mark">×</span> Edwin Angawa</div><div class="person-meta">4 children: Mary, Winny, Natalia, Malin Angawa (twins)</div></div>
+          <div class="person"><div class="person-name">5. Galana Yako</div><div class="person-spouse"><span class="x-mark">×</span> Milka Haiti Hafuri</div><div class="person-meta">4 children: Jacob Galana, Moroa Galana, Eduard Galana, Micheal Wachu Galana</div></div>
+          <div class="person"><div class="person-name">6. Gafo Yako</div><div class="person-spouse"><span class="x-mark">×</span> Nakuta</div><div class="person-meta">1 child: Rebecca Gafo</div></div>
+          <div class="person"><div class="person-name">7. Aladdin Yako</div><div class="person-meta">2 children: Jacob Aladdin, Rebecca Aladdin</div></div>
+          <div class="person"><div class="person-name">8. Margret Makosa Yako</div><div class="person-spouse"><span class="x-mark">×</span> Gafo Dhadho</div><div class="person-meta">3 children: Dhadho Gafo, Abae Gafo, Hadhidha Gafo</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /branches-grid -->
+
+</div><!-- /content -->
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>The Legacy of Guracha</strong> — A Family Heritage Record</p>
+  <p style="margin-top:6px;font-size:11px">© 2026 The Guracha Family · All rights reserved · First Edition 2026</p>
+</footer>
+
+<script>
+  // ── EXPAND / COLLAPSE ─────────────────────────────────────────
+  function toggle(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+  function expandAll() {
+    document.querySelectorAll('.branch').forEach(b => b.classList.add('open'));
+  }
+  function collapseAll() {
+    document.querySelectorAll('.branch').forEach(b => b.classList.remove('open'));
+  }
+
+  // ── SEARCH ENGINE ──────────────────────────────────────────────
+  let allMatches   = [];
+  let currentIndex = -1;
+  let focusedSug   = -1;
+
+  // Build index of all searchable elements at load time
+  const searchIndex = [];
+
+  function buildIndex() {
+    document.querySelectorAll('.person').forEach(el => {
+      const nameEl  = el.querySelector('.person-name');
+      const spEl    = el.querySelector('.person-spouse');
+      const metaEl  = el.querySelector('.person-meta');
+      const branch  = el.closest('.branch');
+      const branchName = branch ? (branch.querySelector('.branch-name')?.textContent || '') : '';
+      searchIndex.push({
+        el, type: 'person',
+        name: nameEl?.textContent || '',
+        spouse: spEl?.textContent || '',
+        meta: metaEl?.textContent || '',
+        branch: branchName,
+      });
+    });
+    document.querySelectorAll('.vittukuu-card').forEach(el => {
+      const nameEl  = el.querySelector('.v-name');
+      const spEl    = el.querySelector('.v-spouse');
+      const childEl = el.querySelector('.v-children');
+      const branch  = el.closest('.branch');
+      const branchName = branch ? (branch.querySelector('.branch-name')?.textContent || '') : '';
+      const parent  = el.closest('.person')?.querySelector('.person-name')?.textContent || '';
+      searchIndex.push({
+        el, type: 'vittukuu',
+        name: nameEl?.textContent || '',
+        spouse: spEl?.textContent || '',
+        meta: childEl?.textContent || '',
+        branch: branchName,
+        parent,
+      });
+    });
+  }
+
+  function highlight(text, term) {
+    if (!term) return text;
+    const re = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+  function handleSearch(q) {
+    const term  = q.trim();
+    const input = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('searchClearBtn');
+    clearBtn.classList.toggle('visible', term.length > 0);
+
+    if (!term) { clearSearch(); return; }
+
+    // Build suggestions
+    const lower = term.toLowerCase();
+    const matches = searchIndex.filter(item =>
+      item.name.toLowerCase().includes(lower) ||
+      item.spouse.toLowerCase().includes(lower) ||
+      item.meta.toLowerCase().includes(lower)
+    ).slice(0, 12);
+
+    renderSuggestions(matches, term);
+  }
+
+  function renderSuggestions(matches, term) {
+    const box = document.getElementById('suggestionsBox');
+    focusedSug = -1;
+
+    if (!matches.length) {
+      box.innerHTML = `<div class="sug-empty">No family member found. Try another name or spelling.</div>`;
+      box.classList.add('open');
+      return;
+    }
+
+    box.innerHTML = matches.map((m, i) => {
+      const ctx = m.type === 'vittukuu'
+        ? `Great-Grandchild${m.parent ? ' — child of ' + m.parent.replace(/^\d+\.\s*/,'') : ''} · ${m.branch}`
+        : `${m.branch}${m.spouse ? ' · Spouse: ' + m.spouse.replace(/[×x]\s*/,'') : ''}`;
+      return `<div class="suggestion-item" data-idx="${i}" onmousedown="selectSuggestion(${i})" onmouseover="focusSug(${i})">
+        <div class="sug-name">${highlight(m.name.replace(/^\d+\.\s*/,''), term)}</div>
+        <div class="sug-context">${ctx}</div>
+      </div>`;
+    }).join('');
+    box.classList.add('open');
+
+    // Store for keyboard nav
+    box._matches = matches;
+  }
+
+  function focusSug(i) {
+    focusedSug = i;
+    document.querySelectorAll('.suggestion-item').forEach((el, idx) =>
+      el.classList.toggle('focused', idx === i));
+  }
+
+  function selectSuggestion(i) {
+    const box = document.getElementById('suggestionsBox');
+    const matches = box._matches || [];
+    if (!matches[i]) return;
+    applySearch(matches[i].name.replace(/^\d+\.\s*/,''), [matches[i]]);
+    document.getElementById('searchInput').value = matches[i].name.replace(/^\d+\.\s*/,'');
+    box.classList.remove('open');
+  }
+
+  function showSuggestions() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (q) handleSearch(q);
+  }
+
+  function handleSearchKey(e) {
+    const box = document.getElementById('suggestionsBox');
+    const items = box.querySelectorAll('.suggestion-item');
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusedSug = Math.min(focusedSug + 1, items.length - 1);
+      items.forEach((el, i) => el.classList.toggle('focused', i === focusedSug));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusedSug = Math.max(focusedSug - 1, 0);
+      items.forEach((el, i) => el.classList.toggle('focused', i === focusedSug));
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (focusedSug >= 0 && box._matches) {
+        selectSuggestion(focusedSug);
+      } else {
+        // Run full search on Enter
+        const term = document.getElementById('searchInput').value.trim();
+        if (term) {
+          box.classList.remove('open');
+          const lower = term.toLowerCase();
+          const found = searchIndex.filter(item =>
+            item.name.toLowerCase().includes(lower) ||
+            item.spouse.toLowerCase().includes(lower) ||
+            item.meta.toLowerCase().includes(lower)
+          );
+          applySearch(term, found);
+        }
+      }
+    } else if (e.key === 'Escape') {
+      box.classList.remove('open');
+    }
+  }
+
+  function applySearch(term, found) {
+    allMatches   = found;
+    currentIndex = found.length ? 0 : -1;
+
+    // Reset all
+    searchIndex.forEach(item => {
+      item.el.classList.remove('highlight', 'dimmed');
+      item.el.style.opacity = '';
+    });
+    document.querySelectorAll('.branch').forEach(b => b.classList.remove('open'));
+
+    if (!found.length) {
+      showResultStrip(0, term);
+      return;
+    }
+
+    // Highlight matches, dim non-matches
+    const matchEls = new Set(found.map(m => m.el));
+    searchIndex.forEach(item => {
+      if (matchEls.has(item.el)) {
+        item.el.classList.add('highlight');
+        item.el.classList.remove('dimmed');
+        // Expand parent branch
+        item.el.closest('.branch')?.classList.add('open');
+      } else {
+        item.el.classList.add('dimmed');
+      }
+    });
+
+    showResultStrip(found.length, term);
+    scrollTo(0);
+  }
+
+  function scrollTo(idx) {
+    if (!allMatches[idx]) return;
+    currentIndex = idx;
+    allMatches[idx].el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Flash animation
+    const el = allMatches[idx].el;
+    el.style.transition = 'box-shadow .3s';
+    el.style.boxShadow = '0 0 0 4px rgba(200,146,42,.6)';
+    setTimeout(() => { el.style.boxShadow = ''; }, 1200);
+    updateNavButtons();
+  }
+
+  function navigateResult(dir) {
+    const next = currentIndex + dir;
+    if (next < 0 || next >= allMatches.length) return;
+    scrollTo(next);
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.disabled = currentIndex <= 0;
+    if (nextBtn) nextBtn.disabled = currentIndex >= allMatches.length - 1;
+    document.getElementById('resultPill').textContent =
+      allMatches.length ? `${currentIndex + 1} of ${allMatches.length}` : '0';
+  }
+
+  function showResultStrip(count, term) {
+    const strip = document.getElementById('resultStrip');
+    const label = document.getElementById('resultLabel');
+    strip.classList.add('show');
+    if (count === 0) {
+      document.getElementById('resultPill').textContent = '0';
+      label.textContent = `No family member found for "${term}". Try another name or spelling.`;
+      document.getElementById('prevBtn').disabled = true;
+      document.getElementById('nextBtn').disabled = true;
+    } else {
+      label.textContent = `result${count > 1 ? 's' : ''} matching "${term}"`;
+      updateNavButtons();
+    }
+  }
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClearBtn').classList.remove('visible');
+    document.getElementById('suggestionsBox').classList.remove('open');
+    document.getElementById('resultStrip').classList.remove('show');
+    searchIndex.forEach(item => {
+      item.el.classList.remove('highlight', 'dimmed');
+      item.el.style.opacity = '';
+      item.el.style.boxShadow = '';
+    });
+    document.querySelectorAll('.branch').forEach(b => b.classList.remove('open'));
+    allMatches = []; currentIndex = -1;
+  }
+
+  // Close suggestions when clicking outside
+  document.addEventListener('click', e => {
+    if (!document.getElementById('searchWrap')?.contains(e.target)) {
+      document.getElementById('suggestionsBox')?.classList.remove('open');
+    }
+  });
+
+  // Build index on load
+  window.addEventListener('DOMContentLoaded', buildIndex);
+</script>
+</body>
+</html>
